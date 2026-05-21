@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.lostfound.dao.MessageMapper">
+
+    <resultMap id="MessageResultMap" type="com.campus.lostfound.entity.Message">
+        <id column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="username" property="username"/>
+        <result column="user_avatar" property="userAvatar"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="MessageResultMap">
+        SELECT m.*, u.username, u.avatar AS user_avatar
+        FROM t_message m
+        LEFT JOIN t_user u ON m.user_id = u.id
+        WHERE m.id = #{id}
+    </select>
+
+    <select id="selectByItemId" resultMap="MessageResultMap">
+        SELECT m.*, u.username, u.avatar AS user_avatar
+        FROM t_message m
+        LEFT JOIN t_user u ON m.user_id = u.id
+        WHERE m.item_id = #{itemId}
+        ORDER BY m.create_time ASC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_message (item_id, user_id, content, parent_id)
+        VALUES (#{itemId}, #{userId}, #{content}, #{parentId})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM t_message WHERE id = #{id}
+    </delete>
+</mapper>

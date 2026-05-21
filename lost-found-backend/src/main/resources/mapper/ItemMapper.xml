@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.lostfound.dao.ItemMapper">
+
+    <resultMap id="ItemResultMap" type="com.campus.lostfound.entity.Item">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="images" property="images"/>
+        <result column="location" property="location"/>
+        <result column="contact_info" property="contactInfo"/>
+        <result column="item_type" property="itemType"/>
+        <result column="status" property="status"/>
+        <result column="ai_category" property="aiCategory"/>
+        <result column="ai_review_result" property="aiReviewResult"/>
+        <result column="ai_review_pass" property="aiReviewPass"/>
+        <result column="found_time" property="foundTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="username" property="username"/>
+        <result column="user_avatar" property="userAvatar"/>
+        <result column="category_name" property="categoryName"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="ItemResultMap">
+        SELECT i.*, u.username, u.avatar AS user_avatar, c.name AS category_name
+        FROM t_item i
+        LEFT JOIN t_user u ON i.user_id = u.id
+        LEFT JOIN t_category c ON i.category_id = c.id
+        WHERE i.id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="ItemResultMap">
+        SELECT i.*, u.username, u.avatar AS user_avatar, c.name AS category_name
+        FROM t_item i
+        LEFT JOIN t_user u ON i.user_id = u.id
+        LEFT JOIN t_category c ON i.category_id = c.id
+        <where>
+            <if test="categoryId != null">
+                AND i.category_id = #{categoryId}
+            </if>
+            <if test="itemType != null">
+                AND i.item_type = #{itemType}
+            </if>
+            <if test="status != null">
+                AND i.status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (i.title LIKE CONCAT('%', #{keyword}, '%') OR i.description LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="location != null and location != ''">
+                AND i.location LIKE CONCAT('%', #{location}, '%')
+            </if>
+        </where>
+        ORDER BY i.create_time DESC
+    </select>
+
+    <select id="selectByUserId" resultMap="ItemResultMap">
+        SELECT i.*, u.username, u.avatar AS user_avatar, c.name AS category_name
+        FROM t_item i
+        LEFT JOIN t_user u ON i.user_id = u.id
+        LEFT JOIN t_category c ON i.category_id = c.id
+        WHERE i.user_id = #{userId}
+        ORDER BY i.create_time DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_item (user_id, category_id, title, description, images, location,
+                           contact_info, item_type, status, ai_category, ai_review_result,
+                           ai_review_pass, found_time)
+        VALUES (#{userId}, #{categoryId}, #{title}, #{description}, #{images}, #{location},
+                #{contactInfo}, #{itemType}, #{status}, #{aiCategory}, #{aiReviewResult},
+                #{aiReviewPass}, #{foundTime})
+    </insert>
+
+    <update id="updateById">
+        UPDATE t_item
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="images != null">images = #{images},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="contactInfo != null">contact_info = #{contactInfo},</if>
+            <if test="itemType != null">item_type = #{itemType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="aiCategory != null">ai_category = #{aiCategory},</if>
+            <if test="aiReviewResult != null">ai_review_result = #{aiReviewResult},</if>
+            <if test="aiReviewPass != null">ai_review_pass = #{aiReviewPass},</if>
+            <if test="foundTime != null">found_time = #{foundTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_item WHERE id = #{id}
+    </delete>
+</mapper>

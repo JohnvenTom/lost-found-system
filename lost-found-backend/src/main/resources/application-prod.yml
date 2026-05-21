@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/campus_lost_found?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      database: 0
+      password: ${REDIS_PASSWORD:}
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:sk-test}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+
+jwt:
+  secret: ${JWT_SECRET:CampusLostFound2026SecretKeyForJwtTokenGenerationMustBe256Bits!!}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+logging:
+  level:
+    com.campus.lostfound: info

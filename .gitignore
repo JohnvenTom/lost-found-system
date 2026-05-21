@@ -1,0 +1,19 @@
+# 课程设计相关文档
+课程设计报告.docx
+项目错误检查报告.md
+
+# Trae 配置目录
+.trae/
+
+# 编辑器配置
+.idea/
+*.iml
+.vscode/
+
+# 打包产物
+dist/
+build/
+out/
+
+# 依赖包
+node_modules/
