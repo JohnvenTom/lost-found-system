@@ -16,7 +16,7 @@ spring:
       base-url: ${OPENAI_BASE_URL:https://api.openai.com}
 
 jwt:
-  secret: ${JWT_SECRET:CampusLostFound2026SecretKeyForJwtTokenGenerationMustBe256Bits!!}
+  secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}
 
 mybatis:
